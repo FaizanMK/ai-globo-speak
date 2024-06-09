@@ -17,6 +17,9 @@ import { useEffect, useRef, useState } from "react";
 import translate from "@/actions/translate";
 import { useFormState } from "react-dom";
 import Image from "next/image";
+import SubmitButton from "./SubmitButton";
+import { Button } from "./ui/button";
+import { Volume2Icon } from "lucide-react";
 
 const initialState = {
   inputLanguage: "auto",
@@ -55,6 +58,16 @@ const TranslationForm = ({
     return () => clearTimeout(delayDebounceFn);
   }, [input]);
 
+  const playAudio = async () => {
+    // web API for voice
+    const synth = window.speechSynthesis;
+
+    if (!output || !synth) return;
+
+    const wordsToSay = new SpeechSynthesisUtterance(output);
+
+    synth.speak(wordsToSay);
+  };
   return (
     <div>
       <div className="flex space-x-2">
@@ -99,7 +112,7 @@ const TranslationForm = ({
             </Select>
 
             <Textarea
-              placeholder="Type ypur message here"
+              placeholder="Type your message here"
               className="min-h-32 text-xl"
               name="input"
               value={input}
@@ -107,31 +120,46 @@ const TranslationForm = ({
             />
           </div>
           <div className="flex-1 space-y-2">
-            <Select name="outputLanguage" defaultValue="es">
-              <SelectTrigger className="w-[280px] border-none text-blue-500 font-bold">
-                <SelectValue placeholder="Select a language" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Want us to figure it out?</SelectLabel>
+            <div className="flex items-center justify-between">
+              <Select name="outputLanguage" defaultValue="es">
+                <SelectTrigger className="w-[280px] border-none text-blue-500 font-bold">
+                  <SelectValue placeholder="Select a language" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Want us to figure it out?</SelectLabel>
 
-                  <SelectItem key="auto" value="auto">
-                    Auto-Detection
-                  </SelectItem>
-                </SelectGroup>
-                <SelectGroup>
-                  <SelectLabel>Languages</SelectLabel>
-                  {Object.entries(languages.translation).map(([key, value]) => (
-                    <SelectItem key={key} value={key}>
-                      {value.name}
+                    <SelectItem key="auto" value="auto">
+                      Auto-Detection
                     </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+                  </SelectGroup>
+                  <SelectGroup>
+                    <SelectLabel>Languages</SelectLabel>
+                    {Object.entries(languages.translation).map(
+                      ([key, value]) => (
+                        <SelectItem key={key} value={key}>
+                          {value.name}
+                        </SelectItem>
+                      )
+                    )}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
 
+              <Button
+                variant="ghost"
+                type="button"
+                onClick={playAudio}
+                disabled={!output}
+              >
+                <Volume2Icon
+                  size={24}
+                  className="text-blue-500 cursor-pointer disabled:cursor-not-allowed"
+                />
+              </Button>
+            </div>
             <Textarea
-              placeholder="Type ypur message here"
+              placeholder="Type your message here"
               className="min-h-32 text-xl"
               name="output"
               value={output}
@@ -139,10 +167,9 @@ const TranslationForm = ({
             />
           </div>
         </div>
-        <div>
-          <button type="submit" ref={submitBtnRef}>
-            Submit
-          </button>
+        <div className="mt-5 flex justify-end">
+          <SubmitButton disabled={!input} />
+          <button type="submit" hidden ref={submitBtnRef} />
         </div>
       </form>
     </div>
