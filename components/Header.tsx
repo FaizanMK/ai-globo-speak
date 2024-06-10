@@ -6,11 +6,6 @@ import React from "react";
 
 const Header = () => {
   const { userId } = auth();
-  const url = `${
-    process.env.NODE_ENV === "development"
-      ? "http://localhost:3000"
-      : process.env.VERCEL_URL
-  }/translate`;
 
   return (
     <header className="flex justify-between px-8 border-b mb-5">
@@ -31,7 +26,7 @@ const Header = () => {
       ) : (
         // forceRedirectUrl: after user sign in redirect the user to /translate page
         // mode: Determines what happens when a user clicks on the <SignInButton>. Setting this to 'redirect' will redirect the user to the sign-in route. Setting this to 'modal' will open a modal on the current route.
-        <SignInButton forceRedirectUrl={url} mode="modal" />
+        <SignInButton forceRedirectUrl={"/translate"} mode="modal" />
       )}
     </header>
   );

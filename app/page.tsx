@@ -6,11 +6,6 @@ import Link from "next/link";
 
 export default async function Home() {
   const { userId } = auth();
-  const url = `${
-    process.env.NODE_ENV === "development"
-      ? "http://localhost:3000"
-      : process.env.VERCEL_URL
-  }/translate`;
 
   return (
     <main className="flex flex-col items-center justify-center p-10">
@@ -32,7 +27,7 @@ export default async function Home() {
         </Link>
       ) : (
         <Button className="bg-blue-500 hover:bg-blue-600 w-full mt-10 lg:w-fit p-5">
-          <SignInButton forceRedirectUrl={url} mode="modal">
+          <SignInButton forceRedirectUrl={"/translate"} mode="modal">
             Sign In to Get Translating
           </SignInButton>
         </Button>
