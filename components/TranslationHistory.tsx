@@ -38,9 +38,9 @@ async function TranslationHistory() {
 
       {/* Show a list of translations */}
       <ul className="divide-y border rounded-md">
-        {translations.map((translation) => (
+        {translations?.map((translation) => (
           <li
-            key={translation._id}
+            key={translation._id as string}
             className="flex justify-between items-center p-5 hover:bg-gray-50 relative"
           >
             <div>
@@ -62,7 +62,7 @@ async function TranslationHistory() {
               />
             </p>
 
-            <DeleteTranslationButton id={translation._id} />
+            <DeleteTranslationButton id={translation._id as string} />
           </li>
         ))}
       </ul>
