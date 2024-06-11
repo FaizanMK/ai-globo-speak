@@ -26,6 +26,7 @@ async function TranslationHistory() {
 
   const { translations }: { translations: Array<ITranslation> } =
     await response?.json();
+  console.log("*********translations", translations);
 
   return (
     <div className="">

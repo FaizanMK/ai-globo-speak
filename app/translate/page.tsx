@@ -30,7 +30,7 @@ const TranslatePage = async () => {
       revalidate: 60 * 60 * 24,
     },
   });
-  const languages = (await response.json()) as TranslationLanguages;
+  const languages = (await response?.json()) as TranslationLanguages;
   return (
     <div className="px-10 xl:px-0 mb-20 ">
       {/* Translation Form */}
