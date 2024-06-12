@@ -10,18 +10,30 @@ const getLanguage = (code: string) => {
 
 async function TranslationHistory() {
   const { userId } = auth();
-
-  const url = `${
+  const baseUrl =
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : process.env.VERCEL_URL
-  }/translationHistory?userId=${userId}`;
+      : `https://${process.env.VERCEL_URL}`;
+
+  const url = `${baseUrl}/translationHistory?userId=${userId}`;
 
   const response = await fetch(url, {
     next: {
       tags: ["translationHistory"],
     },
   });
+
+  // const url = `${
+  //   process.env.NODE_ENV === "development"
+  //     ? "http://localhost:3000"
+  //     : process.env.VERCEL_URL
+  // }/translationHistory?userId=${userId}`;
+
+  // const response = await fetch(url, {
+  //   next: {
+  //     tags: ["translationHistory"],
+  //   },
+  // });
 
   const { translations }: { translations: Array<ITranslation> } =
     await response?.json();
