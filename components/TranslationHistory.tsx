@@ -91,7 +91,6 @@ const getLanguage = (code: string) => {
   const lang = new Intl.DisplayNames(["en"], { type: "language" });
   return lang.of(code);
 };
-
 async function TranslationHistory() {
   const { userId } = auth();
 
@@ -119,7 +118,10 @@ async function TranslationHistory() {
       throw new Error("User is not authenticated.");
     }
 
-    const url = new URL(`/translationHistory?userId=${userId}`, baseUrl);
+    // Constructing the URL correctly
+    const url = new URL(`${baseUrl}/translationHistory`);
+    url.searchParams.append("userId", userId);
+
     console.log("Fetch URL:", url.toString());
 
     const response = await fetch(url.toString(), {
