@@ -81,6 +81,7 @@
 // }
 
 // export default TranslationHistory;
+
 import { ITranslation } from "@/mongodb/models/User";
 import { auth } from "@clerk/nextjs/server";
 import DeleteTranslationButton from "./DeleteTranslationButton";
@@ -93,7 +94,6 @@ const getLanguage = (code: string) => {
 
 async function TranslationHistory() {
   const { userId } = auth();
-  console.log("User ID:", userId);
 
   const baseUrl =
     process.env.NODE_ENV === "development"
@@ -115,16 +115,18 @@ async function TranslationHistory() {
   }
 
   try {
-    const url = new URL(
-      `/translationHistory?userId=${userId}`,
-      `https://${baseUrl}`
-    );
+    if (!userId) {
+      throw new Error("User is not authenticated.");
+    }
+
+    const url = new URL(`/translationHistory?userId=${userId}`, baseUrl);
     console.log("Fetch URL:", url.toString());
 
     const response = await fetch(url.toString(), {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        // Add any additional headers like authorization tokens if needed
       },
       next: {
         tags: ["translationHistory"],
@@ -137,18 +139,14 @@ async function TranslationHistory() {
 
     const { translations }: { translations: Array<ITranslation> } =
       await response.json();
-    console.log("*********translations", translations);
+    console.log("Translations:", translations);
 
     return (
       <div className="">
         <h1 className="text-3xl my-5">History</h1>
-
-        {/* Show a message if there are no translations */}
         {translations.length === 0 && (
           <p className="mb-5 text-gray-400">No translations yet</p>
         )}
-
-        {/* Show a list of translations */}
         <ul className="divide-y border rounded-md">
           {translations?.map((translation) => (
             <li
@@ -180,7 +178,7 @@ async function TranslationHistory() {
         </ul>
       </div>
     );
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error fetching translation history:", error);
     return (
       <div>
@@ -188,6 +186,7 @@ async function TranslationHistory() {
         <p className="mb-5 text-red-500">
           Failed to load translations. Please try again later.
         </p>
+        <p className="mb-5 text-gray-400">{error.message}</p>
       </div>
     );
   }
