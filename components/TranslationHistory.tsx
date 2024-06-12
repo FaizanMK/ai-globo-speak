@@ -81,7 +81,6 @@
 // }
 
 // export default TranslationHistory;
-
 import { ITranslation } from "@/mongodb/models/User";
 import { auth } from "@clerk/nextjs/server";
 import DeleteTranslationButton from "./DeleteTranslationButton";
@@ -116,10 +115,17 @@ async function TranslationHistory() {
   }
 
   try {
-    const url = new URL(`/translationHistory?userId=${userId}`, baseUrl);
+    const url = new URL(
+      `/translationHistory?userId=${userId}`,
+      `https://${baseUrl}`
+    );
     console.log("Fetch URL:", url.toString());
 
     const response = await fetch(url.toString(), {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
       next: {
         tags: ["translationHistory"],
       },
