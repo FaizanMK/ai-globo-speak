@@ -85,6 +85,11 @@ const getLanguage = (code: string) => {
 async function TranslationHistory() {
   const { userId } = auth();
 
+  if (!userId) {
+    console.error("User not authenticated");
+    throw new Error("User not authenticated");
+  }
+
   const baseUrl =
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
