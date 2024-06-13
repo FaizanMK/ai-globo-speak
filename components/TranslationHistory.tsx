@@ -81,7 +81,6 @@
 // }
 
 // export default TranslationHistory;
-
 import { ITranslation } from "@/mongodb/models/User";
 import { auth } from "@clerk/nextjs/server";
 import DeleteTranslationButton from "./DeleteTranslationButton";
@@ -95,7 +94,6 @@ const getLanguage = (code: string) => {
 async function TranslationHistory() {
   const { userId } = auth();
 
-  // Determine the base URL based on the environment
   const baseUrl =
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
@@ -131,11 +129,16 @@ async function TranslationHistory() {
 
     console.log("Constructed URL:", url.toString());
 
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`, // Ensure this is correctly set
+    };
+
+    console.log("Headers:", headers);
+
     const response = await fetch(url.toString(), {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: headers,
       next: {
         tags: ["translationHistory"],
       },
