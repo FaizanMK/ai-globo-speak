@@ -122,13 +122,16 @@ async function TranslationHistory() {
     const url = new URL(`${baseUrl}/translationHistory`);
     url.searchParams.append("userId", userId);
 
+    console.log("Base URL:", baseUrl);
+    console.log("Constructed URL:", url.toString());
+
     console.log("Fetch URL:", url.toString());
 
     const response = await fetch(url.toString(), {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        // Add any additional headers like authorization tokens if needed
+        Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`,
       },
       next: {
         tags: ["translationHistory"],
