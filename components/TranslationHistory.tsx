@@ -81,6 +81,7 @@
 // }
 
 // export default TranslationHistory;
+
 import { ITranslation } from "@/mongodb/models/User";
 import { auth } from "@clerk/nextjs/server";
 import DeleteTranslationButton from "./DeleteTranslationButton";
@@ -98,7 +99,9 @@ async function TranslationHistory() {
   const baseUrl =
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : process.env.VERCEL_URL;
+      : process.env.VERCEL_URL?.startsWith("http")
+      ? process.env.VERCEL_URL
+      : `https://${process.env.VERCEL_URL}`;
 
   console.log("process.env.NODE_ENV:", process.env.NODE_ENV);
   console.log("process.env.VERCEL_URL:", process.env.VERCEL_URL);
