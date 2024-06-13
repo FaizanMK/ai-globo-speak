@@ -135,7 +135,6 @@ async function TranslationHistory() {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`, // Include authorization token if necessary
       },
       next: {
         tags: ["translationHistory"],
