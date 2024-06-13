@@ -91,13 +91,14 @@ const getLanguage = (code: string) => {
   const lang = new Intl.DisplayNames(["en"], { type: "language" });
   return lang.of(code);
 };
+
 async function TranslationHistory() {
   const { userId } = auth();
 
   const baseUrl =
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : `https://${process.env.VERCEL_URL}`;
+      : process.env.VERCEL_URL; // Ensure VERCEL_URL is set correctly in your environment variables
 
   if (!baseUrl) {
     console.error(
@@ -118,20 +119,17 @@ async function TranslationHistory() {
       throw new Error("User is not authenticated.");
     }
 
-    // Constructing the URL correctly
     const url = new URL(`${baseUrl}/translationHistory`);
     url.searchParams.append("userId", userId);
 
     console.log("Base URL:", baseUrl);
     console.log("Constructed URL:", url.toString());
 
-    console.log("Fetch URL:", url.toString());
-
     const response = await fetch(url.toString(), {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`,
+        Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`, // Include authorization token if necessary
       },
       next: {
         tags: ["translationHistory"],
