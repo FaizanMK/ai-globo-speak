@@ -98,7 +98,7 @@ async function TranslationHistory() {
   const baseUrl =
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : process.env.VERCEL_URL; // Ensure VERCEL_URL is set correctly in your environment variables
+      : process.env.VERCEL_URL;
 
   if (!baseUrl) {
     console.error(
@@ -143,7 +143,10 @@ async function TranslationHistory() {
     const { translations }: { translations: Array<ITranslation> } =
       await response.json();
     console.log("Translations:", translations);
-
+    console.log("process.env.NODE_ENV:", process.env.NODE_ENV);
+    console.log("process.env.VERCEL_URL:", process.env.VERCEL_URL);
+    console.log("Base URL:", baseUrl);
+    console.log("Constructed URL:", url.toString());
     return (
       <div className="">
         <h1 className="text-3xl my-5">History</h1>
@@ -183,6 +186,7 @@ async function TranslationHistory() {
     );
   } catch (error: any) {
     console.error("Error fetching translation history:", error);
+
     return (
       <div>
         <h1 className="text-3xl my-5">History</h1>
