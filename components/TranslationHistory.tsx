@@ -81,7 +81,6 @@
 // }
 
 // export default TranslationHistory;
-
 import { ITranslation } from "@/mongodb/models/User";
 import { auth } from "@clerk/nextjs/server";
 import DeleteTranslationButton from "./DeleteTranslationButton";
@@ -95,10 +94,15 @@ const getLanguage = (code: string) => {
 async function TranslationHistory() {
   const { userId } = auth();
 
+  // Determine the base URL based on the environment
   const baseUrl =
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
       : process.env.VERCEL_URL;
+
+  console.log("process.env.NODE_ENV:", process.env.NODE_ENV);
+  console.log("process.env.VERCEL_URL:", process.env.VERCEL_URL);
+  console.log("Base URL:", baseUrl);
 
   if (!baseUrl) {
     console.error(
@@ -122,7 +126,6 @@ async function TranslationHistory() {
     const url = new URL(`${baseUrl}/translationHistory`);
     url.searchParams.append("userId", userId);
 
-    console.log("Base URL:", baseUrl);
     console.log("Constructed URL:", url.toString());
 
     const response = await fetch(url.toString(), {
@@ -143,10 +146,7 @@ async function TranslationHistory() {
     const { translations }: { translations: Array<ITranslation> } =
       await response.json();
     console.log("Translations:", translations);
-    console.log("process.env.NODE_ENV:", process.env.NODE_ENV);
-    console.log("process.env.VERCEL_URL:", process.env.VERCEL_URL);
-    console.log("Base URL:", baseUrl);
-    console.log("Constructed URL:", url.toString());
+
     return (
       <div className="">
         <h1 className="text-3xl my-5">History</h1>
@@ -186,7 +186,6 @@ async function TranslationHistory() {
     );
   } catch (error: any) {
     console.error("Error fetching translation history:", error);
-
     return (
       <div>
         <h1 className="text-3xl my-5">History</h1>
