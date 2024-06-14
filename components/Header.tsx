@@ -12,11 +12,11 @@ const Header = () => {
       <div className="flex items-center h-20 overflow-hidden ">
         <Link href="/">
           <Image
-            src="https://links.papareact.com/xgu"
+            src="/gs.png"
             alt="logo"
             width={200}
             height={100}
-            className="object-contain h-32 cursor-pointer"
+            className="object-contain h-32 cursor-pointer "
           />
         </Link>
       </div>
